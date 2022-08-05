@@ -1,12 +1,24 @@
 import React from 'react';
-import {useSelector,useDispatch} from "react-redux";
+import {useTypedDispatch} from "../hooks/useTypedDispatch";
+import {useTypedSelector} from "../hooks/useTypedSelector";
 import {getPosts} from "../store/features/post/postSlice";
 import {useEffect} from "react";
-const Posts = () => {
+import {Post} from "../store/features/post/postSlice";
+import styled from "styled-components";
 
-    // @ts-ignore
-    const posts = useSelector(state => state.posts.posts)
-    const dispatch = useDispatch()
+const Posts:React.FC = () => {
+
+const StyledList = styled('li')`
+  list-style-type: none;
+  border: groove lightblue;
+`
+    const Hint = styled('span')`
+    text-decoration: none;
+      color: grey;
+    `
+
+    const posts = useTypedSelector(state => state.posts.posts)
+    const dispatch = useTypedDispatch()
     useEffect(()=>{
     dispatch(getPosts())
     },[dispatch])
@@ -16,11 +28,12 @@ const Posts = () => {
         <div>
             <h1>All posts</h1>
             <ul>
-                {posts.map((post: any, index: React.Key | null | undefined)=>{
+                {posts.map((post:Post)=>{
                     return (
-                        <li key={index}>
-                            post
-                        </li>
+                        <StyledList key={post.id}>
+                            <h1><Hint>Title:</Hint>{post.title}</h1>
+                            <p><Hint>Content:</Hint>{post.body}</p>
+                        </StyledList>
                     )
                 })}
             </ul>

@@ -1,32 +1,34 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export interface Post {
+export type Post = {
     id: number,
     title: string,
     body: string,
     userId: number
 }
 
-export type PostProps = {
-    posts: Post[],
-    isLoading: boolean
+type PostState = {
+    posts:Post[];
+    isLoading:boolean
+}
+
+const initialState:PostState = {
+    posts:[],
+    isLoading:false
 }
 
 export const postSlice = createSlice({
     name: "posts",
-    initialState: {
-        posts: [],
-        isLoading: false
-    },
+    initialState,
     reducers: {
         getPosts: (state) => {
             state.isLoading = true;
         },
-        getPostsSuccess: (state, action) => {
-            state.posts;
+        getPostsSuccess: (state, action:PayloadAction<any>) => {
+            state.posts=action.payload;
             state.isLoading = false;
         },
-        getPostFailed: (state, action) => {
+        getPostsFailed: (state) => {
             state.isLoading = false;
         }
     }
@@ -36,7 +38,7 @@ export const postSlice = createSlice({
 export const {
     getPosts,
     getPostsSuccess,
-    getPostFailed
+    getPostsFailed
 } = postSlice.actions;
 
 export default postSlice.reducer
